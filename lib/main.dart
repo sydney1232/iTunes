@@ -42,6 +42,26 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     getSearch();
-    return Scaffold();
+    return Scaffold(
+      body: FutureBuilder(
+        future: getSearch(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return ListView.builder(
+                itemCount: songResult.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(songResult[index].artistName),
+                    subtitle: Text(songResult[index].trackName),
+                  );
+                });
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return const Center(child: Text('Error loading data'));
+          }
+        },
+      ),
+    );
   }
 }
