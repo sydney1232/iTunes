@@ -22,8 +22,7 @@ class MyApp extends StatefulWidget {
 List<Song> songResult = [];
 
 Future getSearch() async {
-  const String apiUrl =
-      'https://itunes.apple.com/search?term=jack+johnson&limit=1';
+  const String apiUrl = 'https://itunes.apple.com/search?term=jack+johnson';
   final http.Response response = await http.get(Uri.parse(apiUrl));
   parseJson(response);
 }
@@ -35,7 +34,10 @@ parseJson(http.Response response) {
     final result = Song(
         artistName: eachResult['artistName'],
         trackName: eachResult['trackName'],
-        artworkUrl60: eachResult['artworkUrl60']);
+        artworkUrl60: eachResult['artworkUrl60'],
+        trackPricing: eachResult['trackPrice'],
+        genre: eachResult['primaryGenreName'],
+        currency: eachResult['currency']);
     songResult.add(result);
   }
 }
@@ -57,9 +59,13 @@ class _MyAppState extends State<MyApp> {
                 itemCount: songResult.length,
                 itemBuilder: (context, index) {
                   return CardTile(
-                      title: songResult[index].trackName,
-                      subtitle: songResult[index].artistName,
-                      webUrl: songResult[index].artworkUrl60);
+                    title: songResult[index].trackName,
+                    subtitle: songResult[index].artistName,
+                    webUrl: songResult[index].artworkUrl60,
+                    genre: songResult[index].genre,
+                    currency: songResult[index].currency,
+                    trackPricing: songResult[index].trackPricing,
+                  );
                 });
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
