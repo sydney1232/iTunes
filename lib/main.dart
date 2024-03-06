@@ -21,7 +21,7 @@ class MyApp extends StatefulWidget {
 List<Song> songResult = [];
 
 Future getSearch() async {
-  const String apiUrl = 'https://itunes.apple.com/search?term=popular';
+  const String apiUrl = 'https://itunes.apple.com/search?term=jack+johnson';
   final http.Response response = await http.get(Uri.parse(apiUrl));
   parseJson(response);
 }
@@ -43,6 +43,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     getSearch();
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("iTunes"),
+      ),
       body: FutureBuilder(
         future: getSearch(),
         builder: (context, snapshot) {
