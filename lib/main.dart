@@ -21,7 +21,7 @@ class MyApp extends StatefulWidget {
 List<Song> songResult = [];
 
 Future getSearch() async {
-  const String apiUrl = 'https://itunes.apple.com/search?term=jack+johnson';
+  const String apiUrl = 'https://itunes.apple.com/search?term=popular';
   final http.Response response = await http.get(Uri.parse(apiUrl));
   parseJson(response);
 }
@@ -31,9 +31,9 @@ parseJson(http.Response response) {
 
   for (var eachResult in jsonData['results']) {
     final result = Song(
-      artistName: eachResult['artistName'],
-      trackName: eachResult['trackName'],
-    );
+        artistName: eachResult['artistName'],
+        trackName: eachResult['trackName'],
+        artworkUrl60: eachResult['artworkUrl60']);
     songResult.add(result);
   }
 }
@@ -53,6 +53,7 @@ class _MyAppState extends State<MyApp> {
                   return ListTile(
                     title: Text(songResult[index].artistName),
                     subtitle: Text(songResult[index].trackName),
+                    leading: Image.network(songResult[index].artworkUrl60),
                   );
                 });
           } else if (snapshot.connectionState == ConnectionState.waiting) {
