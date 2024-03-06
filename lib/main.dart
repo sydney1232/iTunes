@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:itunes_api/model/itunes_model.dart';
+import 'package:itunes_api/widgets/Card.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -21,7 +22,8 @@ class MyApp extends StatefulWidget {
 List<Song> songResult = [];
 
 Future getSearch() async {
-  const String apiUrl = 'https://itunes.apple.com/search?term=jack+johnson';
+  const String apiUrl =
+      'https://itunes.apple.com/search?term=jack+johnson&limit=1';
   final http.Response response = await http.get(Uri.parse(apiUrl));
   parseJson(response);
 }
@@ -54,11 +56,10 @@ class _MyAppState extends State<MyApp> {
             return ListView.builder(
                 itemCount: songResult.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(songResult[index].artistName),
-                    subtitle: Text(songResult[index].trackName),
-                    leading: Image.network(songResult[index].artworkUrl60),
-                  );
+                  return CardTile(
+                      title: songResult[index].trackName,
+                      subtitle: songResult[index].artistName,
+                      webUrl: songResult[index].artworkUrl60);
                 });
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
